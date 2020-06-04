@@ -45,4 +45,29 @@ app.get("/", function (req, res) {
   res.render("index");
 });
 
+const db = mongoose.connection; //работаем с бд
+
+db.on("error", (err) => {
+  console.log("error", err);
+}); //test on err
+
+db.once("open", () => {
+  console.log("we are connected");
+}); //успешно подключились к базе и можем писать наши запросы
+
+const User = require("./models/user");
+
+const user = new User({ name: "Alex" });
+
+user.save((err, user) => {
+  if (err) {
+    console.log("err", err);
+  }
+  console.log("saved user", user);
+});
+
+User.findById("59d8acf4ce867b292ddb815e", (err, user) => {
+  console.log("result", err, user);
+});
+
 start();
